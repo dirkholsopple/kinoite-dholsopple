@@ -42,6 +42,16 @@ COPY modules /tmp/modules/
 # It is copied from the official container image since it's not available as an RPM.
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
 
+# Kernel modules
+COPY --from=ghcr.io/dirkholsopple/ucore-kmods:39 /rpms/ /tmp/rpms
+RUN rpm-ostree install /tmp/rpms/kmods/zfs/*.rpm
+
+COPY --from=ghcr.io/ublue-os/akmods:main-39 /rpms/ /tmp/rpms
+RUN rpm-ostree install /tmp/rpms/kmods/kmod-v4l2loopback*.rpm
+RUN find /tmp/rpms -iname '*.rpm'
+# RUN rpm-ostree install /tmp/rpms/kmods/kmod-evdi*.rpm
+RUN rpm-ostree install /tmp/rpms/kmods/kmod-winesync*.rpm
+
 # Run the build script, then clean up temp files and finalize container build.
 RUN chmod +x /tmp/build.sh && /tmp/build.sh && \
     rm -rf /tmp/* /var/* && ostree container commit
