@@ -50,7 +50,7 @@ RUN rpm-ostree install /tmp/rpms/kmods/nvidia/*.rpm
 COPY --from=ghcr.io/ublue-os/akmods:main-39 /rpms/ /tmp/rpms
 RUN rpm-ostree install /tmp/rpms/kmods/kmod-v4l2loopback*.rpm
 RUN find /tmp/rpms -iname '*.rpm'
-# RUN rpm-ostree install /tmp/rpms/kmods/kmod-evdi*.rpm
+RUN rpm-ostree install /tmp/rpms/kmods/kmod-evdi*.rpm
 RUN rpm-ostree install /tmp/rpms/kmods/kmod-winesync*.rpm
 
 # Run the build script, then clean up temp files and finalize container build.
